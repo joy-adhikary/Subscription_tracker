@@ -8,7 +8,7 @@ userRoute.get("/profile", (req, res) => {
   });
 });
 
-userRoute.post("/update-profile", (req, res) => {
+userRoute.post("/user", (req, res) => {
   res.send({
     message: "Update profile route",
   });
@@ -17,6 +17,18 @@ userRoute.post("/update-profile", (req, res) => {
 userRoute.get('/allusers', (req, res)=> {
     res.send({
         message: 'All users route',
+    })
+})
+
+userRoute.get('/:id', (req,res)=> {
+    res.send({
+        message: 'Get user by id route',
+    })
+})
+
+userRoute.delete('/:id', (req, res) => {
+    res.send({
+        message: 'Delete user by id route',
     })
 })
 
