@@ -7,7 +7,35 @@ import User from "../models/user.model.js"
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/env.js"
 
 export const SignIn = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
 
+        const isUserExist = User.findOne({email});
+        if(!isUserExist) {
+            const error = new Error("Opps, User Not Found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const isPasswordMatched = await bcrypt.compare(password, isUserExist.password);
+        if (!isPasswordMatched) {
+            const error = new Error("Opps, Invalid Password");
+            error.statusCode = 401;
+            throw error;
+        }
+
+        const token = jwt.sign({userId: isUserExist._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+        res.status(200).json({
+            success: true,
+            message: "User login successfully",
+            data: {
+                user: isUserExist,
+                token,
+            }
+        })
+    } catch (error) {
+        next(error);
+    }
 }
 
 export const SignUp = async (req, res, next) => {
@@ -29,7 +57,7 @@ export const SignUp = async (req, res, next) => {
         const solt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, solt);
 
-        const newUsers = await User.create([{ email, password: hashedPassword, name, role }],{ session: transaction });
+        const newUsers = await User.create([{ email, password: hashedPassword, name, role }], { session: transaction });
 
         const token = jwt.sign({ userId: newUsers[0]._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
