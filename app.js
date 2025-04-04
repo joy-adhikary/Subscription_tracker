@@ -7,6 +7,7 @@ import authRoute from "./routes/auth.route.js";
 import userRoute from "./routes/user.route.js";
 import subscriptionRoute from "./routes/subscription.route.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import loadBlancerMiddleware from "./middlewares/loadBlancer.middleware.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(errorMiddleware);
 app.use(express.urlencoded({ extended: false })); // process the from data send from the client in a simple html form format 
 app.use(cookieParser());
+app.use(loadBlancerMiddleware);
 
 // Routes
 app.use('/api/v1/users', userRoute);
