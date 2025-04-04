@@ -2,7 +2,6 @@ import mongoose from "mongoose"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-
 import User from "../models/user.model.js"
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/env.js"
 
@@ -10,8 +9,8 @@ export const SignIn = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        const isUserExist = User.findOne({email});
-        if(!isUserExist) {
+        const isUserExist = await User.findOne({ email });
+        if (!isUserExist) {
             const error = new Error("Opps, User Not Found");
             error.statusCode = 404;
             throw error;
@@ -23,8 +22,8 @@ export const SignIn = async (req, res, next) => {
             error.statusCode = 401;
             throw error;
         }
-
-        const token = jwt.sign({userId: isUserExist._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+        
+        const token = jwt.sign({ userId: isUserExist._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
         res.status(200).json({
             success: true,
             message: "User login successfully",
@@ -82,12 +81,25 @@ export const SignUp = async (req, res, next) => {
 }
 
 export const SignOut = async (req, res, next) => {
+    try {
+        console.log("Forgot Password");
+    } catch (error) {
+        next(error);
+    }
 }
 
 export const ForgotPassword = async (req, res, next) => {
-
+    try {
+        console.log("Forgot Password");
+    } catch (error) {
+        next(error);
+    }
 }
 
 export const ResetPassword = async (req, res, next) => {
-
+    try {
+        console.log("Forgot Password");
+    } catch (error) {
+        next(error);
+    }
 }

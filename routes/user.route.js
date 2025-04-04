@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { deleteUser, getAllUsers, getUser, updateUser } from "../controllers/user.controller.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 const userRoute = Router();
 
@@ -8,28 +10,15 @@ userRoute.get("/profile", (req, res) => {
   });
 });
 
-userRoute.post("/user", (req, res) => {
-  res.send({
-    message: "Update profile route",
-  });
-});
+// caile multiple middlewares add kora jabe. Just aktar por akta middleware comma diye add kore dite hobe.
+// middlewares er next() ta porer middleware ke pass kore dibe jodi sob ok thake. 
 
-userRoute.get('/allusers', (req, res)=> {
-    res.send({
-        message: 'All users route',
-    })
-})
+userRoute.post('/:id', authMiddleware, updateUser);
 
-userRoute.get('/:id', (req,res)=> {
-    res.send({
-        message: 'Get user by id route',
-    })
-})
+userRoute.get('/allusers', getAllUsers);
 
-userRoute.delete('/:id', (req, res) => {
-    res.send({
-        message: 'Delete user by id route',
-    })
-})
+userRoute.get('/:id', authMiddleware, getUser);
+
+userRoute.delete('/:id', authMiddleware, deleteUser);
 
 export default userRoute;
