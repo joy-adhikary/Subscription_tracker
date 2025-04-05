@@ -1,42 +1,27 @@
 import { Router } from "express";
 
+import authMiddleware from "../middlewares/auth.middleware.js";
+import { getAllSubscriptions, getAllSubscriptionsByUser, createSubscription, getSubscription, updateSubscriptions, deleteSubscriptions } from "../controllers/subscription.controller.js";
+
 const subscriptionRoute = Router();
 
-subscriptionRoute.get('/', (req, res) => {
-    res.send({
-        message: 'get all subscription route',
-    })
-})
 
-subscriptionRoute.get('/:id', (req,res)=> {
-    res.send({
-        message: 'get subscription by id route',
-    })
-})
+subscriptionRoute.get('/all-subs/:id', authMiddleware, getAllSubscriptionsByUser);
 
-subscriptionRoute.post('/subscribe', (req, res) => {
-    res.send({
-        message: 'subscribe route',
-    })
-})
+subscriptionRoute.get('/', authMiddleware, getAllSubscriptions)
 
-subscriptionRoute.put('/:id', (req,res)=> {
-    res.send({
-        message: 'update subscription by id route',
-    })
-})
+subscriptionRoute.get('/:id', authMiddleware, getSubscription);
 
-subscriptionRoute.put('/:id/cancle', (req,res)=> {
+subscriptionRoute.post('/subscribe', authMiddleware, createSubscription);
+
+subscriptionRoute.put('/:id', authMiddleware, updateSubscriptions);
+
+subscriptionRoute.put('/:id/cancle', (req, res) => {
     res.send({
         message: 'cancle subscription by id route',
     })
 })
 
-
-subscriptionRoute.delete('/:id', (req, res) => {
-    res.send({
-        message: 'update subscription route',
-    })
-})
+subscriptionRoute.delete('/:id', authMiddleware, deleteSubscriptions);
 
 export default subscriptionRoute;

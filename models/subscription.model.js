@@ -71,7 +71,13 @@ const subscriptionSchema = new mongoose.Schema({
         // index for optimse the query by indexing the user fields
         index: true,
     },
-
+    userEmail :  {
+        type: String,
+        required: [true, 'User email is required'],
+        trim: true,
+        lowercase: true,
+        match: [/\S+@\S+\.\S+/, 'Invalid email address'],
+    },
 }, {timestamps: true});
 
 // auto calculate renew date 
