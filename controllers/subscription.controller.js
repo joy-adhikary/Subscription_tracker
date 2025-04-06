@@ -20,6 +20,12 @@ export const createSubscription = async (req, res, next) => {
 
 export const getSubscription = async (req, res, next) => {
     try {
+        if (req.params.id != req.user._id) {
+            const error = new Error("Ops, You are not authorized to access this subscription");
+            error.statusCode = 401;
+            throw error;
+        }
+
         const subscription = await Subscription.findById(req.params.id);
 
         if (!subscription) {
